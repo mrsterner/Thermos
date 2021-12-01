@@ -14,9 +14,7 @@ public class CoilModel extends AnimatedGeoModel<BoilerBlockEntity> {
 
     @Override
     public Identifier getTextureLocation(BoilerBlockEntity object) {
-        String string = object.getCachedState().getBlock().getName().getString();
-        String s = string.substring(string.lastIndexOf(".") + 1);
-        return new Identifier("textures/block/" + s.replace("_coil", "") + ".png");
+        return new Identifier(Thermus.MODID, "textures/block/coil.png");
     }
 
     @Override

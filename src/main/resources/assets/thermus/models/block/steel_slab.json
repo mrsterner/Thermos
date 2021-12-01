@@ -1,0 +1,8 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "thermus:block/steel_block",
+    "top": "thermus:block/steel_block",
+    "side": "thermus:block/steel_block"
+  }
+}

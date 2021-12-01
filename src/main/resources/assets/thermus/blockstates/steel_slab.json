@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "thermus:block/steel_slab"
+    },
+    "type=top": {
+      "model": "thermus:block/steel_slab_top"
+    },
+    "type=double": {
+      "model": "thermus:block/steel_block"
+    }
+  }
+}

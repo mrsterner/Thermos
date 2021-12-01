@@ -6,9 +6,14 @@
 
   "item.thermus.debug_thermus": "Thermus Debug Stick",
   "item.thermus.copper_coil": "Copper Coil",
-  "item.thermus.copper_gold": "Gold Coil",
-  "item.thermus.copper_iron": "Iron Coil",
-  "item.thermus.copper_steel": "Steel Coil",
+  "item.thermus.gold_coil": "Gold Coil",
+  "item.thermus.iron_coil": "Iron Coil",
+  "item.thermus.steel_coil": "Steel Coil",
+  "item.thermus.copper_hammer": "Copper Hammer",
+  "item.thermus.gold_hammer": "Gold Hammer",
+  "item.thermus.iron_hammer": "Iron Hammer",
+  "item.thermus.steel_hammer": "Steel Hammer",
+
 
   "block.thermus.pipe_block": "Copper Pipe"
 }
