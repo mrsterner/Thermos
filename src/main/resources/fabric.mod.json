@@ -1,29 +1,47 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "thermus",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Thermus",
+  "description": "Cold winter temperatures ",
   "authors": [
     "Me!"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/mrsterner/thermus"
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/thermus/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "com.bloomhousemc.thermus.Thermus"
+    ],
+    "client": [
+      "com.bloomhousemc.thermus.ThermusClient"
+    ],
+    "modmenu": [
+      "com.bloomhousemc.thermus.client.compat.ThermusModMenu"
+    ],
+    "cardinal-components-entity": [
+      "com.bloomhousemc.thermus.common.registry.ThermusComponents"
+    ],
+    "cardinal-components-world": [
+      "com.bloomhousemc.thermus.common.registry.ThermusComponents"
+    ],
+    "cardinal-components-chunk": [
+      "com.bloomhousemc.thermus.common.registry.ThermusComponents"
+    ],
+    "cardinal-components-block": [
+      "com.bloomhousemc.thermus.common.registry.ThermusComponents"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "thermus.mixins.json"
   ],
 
   "depends": {

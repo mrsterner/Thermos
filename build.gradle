@@ -11,11 +11,40 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
+	maven {
+		name = 'Ladysnake Mods'
+		url = 'https://ladysnake.jfrog.io/artifactory/mods'
+		content {
+			includeGroup 'io.github.ladysnake'
+			includeGroupByRegex 'io\\.github\\.onyxstudios.*'
+		}
+	}
+
+	maven {
+		name = "Mod Menu"
+		url =  "https://maven.terraformersmc.com/releases"
+	}
+
+	maven {
+		name = "Cardinal Components API"
+		url = "https://maven.abusedmaster.xyz/"
+	}
+
+	maven {
+		name = "Cloth Config"
+		url = "https://maven.shedaniel.me/"
+	}
+
+	maven {
+		name = "Cotton"
+		url = "http://server.bbkr.space:8081/artifactory/libs-release/"
+		allowInsecureProtocol = true
+	}
+
+	maven {
+		name = 'GeckoLib'
+		url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+	}
 }
 
 dependencies {
@@ -26,6 +55,29 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	//CCA
+	modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${cca_version}"
+	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${cca_version}"
+	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cca_version}"
+	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cca_version}"
+	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-world:${cca_version}"
+	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-world:${cca_version}"
+	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-chunk:${cca_version}"
+	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-chunk:${cca_version}"
+	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${cca_version}"
+	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${cca_version}"
+
+	//Cloth Config
+	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+
+	//Modmenu
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+	//Geckolib
+	modImplementation "software.bernie.geckolib:geckolib-fabric-${gecko_version}"
 }
 
 processResources {
