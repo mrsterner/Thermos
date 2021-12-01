@@ -13,7 +13,16 @@
   "item.thermus.gold_hammer": "Gold Hammer",
   "item.thermus.iron_hammer": "Iron Hammer",
   "item.thermus.steel_hammer": "Steel Hammer",
+  "item.thermus.steel_plate": "Steel Plate",
+  "item.thermus.copper_plate": "Copper Plate",
+  "item.thermus.gold_plate": "Gold Plate",
+  "item.thermus.iron_plate": "Iron Plate",
+  "item.thermus.steel_ingot": "Steel Ingot",
 
 
-  "block.thermus.pipe_block": "Copper Pipe"
+  "block.thermus.pipe_block": "Copper Pipe",
+  "block.thermus.boiler_block": "Boiler",
+  "block.thermus.steel_block": "Steel Block",
+  "block.thermus.steel_slab": "Steel Slab",
+  "block.thermus.machine_frame": "Machine Frame"
 }

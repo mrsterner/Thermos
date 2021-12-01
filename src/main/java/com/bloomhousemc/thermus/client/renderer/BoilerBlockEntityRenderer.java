@@ -35,7 +35,7 @@ public class BoilerBlockEntityRenderer extends GeoBlockRenderer<BoilerBlockEntit
     public void render(BoilerBlockEntity tile, float partialTicks, MatrixStack matrixStack, VertexConsumerProvider bufferIn, int packedLightIn) {
         super.render(tile, partialTicks, matrixStack, bufferIn, packedLightIn);
         BlockState blockState = tile.getWorld().getBlockState(tile.getPos());
-        if(blockState.getBlock() instanceof BoilerBlock && blockState.get(COIL)==0){
+        if(blockState.getBlock() instanceof BoilerBlock && blockState.get(COIL)!=0){
             matrixStack.push();
 
             Direction direction = blockState.get(FACING);
@@ -51,15 +51,19 @@ public class BoilerBlockEntityRenderer extends GeoBlockRenderer<BoilerBlockEntit
             direction == Direction.SOUTH ? 0 : 270));
 
 
-            render(getGeoModelProvider().getModel(new Identifier(Thermus.MODID, "geo/coil.geo.json")), tile, partialTicks, RenderLayer.getEntityCutout(getTexture("")), matrixStack,bufferIn, bufferIn.getBuffer(RenderLayer.getEntityCutout(coilModel.getTextureLocation(tile))) ,packedLightIn, OverlayTexture.DEFAULT_UV, 1,1,1,1);
+            render(getGeoModelProvider().getModel(new Identifier(Thermus.MODID, "geo/coil.geo.json")), tile, partialTicks, RenderLayer.getEntityCutout(getTexture(blockState,"")), matrixStack,bufferIn, bufferIn.getBuffer(RenderLayer.getEntityCutout(coilModel.getTextureLocation(tile))) ,packedLightIn, OverlayTexture.DEFAULT_UV, 1,1,1,1);
             matrixStack.pop();
 
         }
 
     }
-    public static Identifier getTexture(String string){
-        String s = string.substring(string.lastIndexOf(".")+1);
-        return new Identifier( "textures/block/copper_block.png");
+    public static Identifier getTexture(BlockState blockState, String string){
+        if(blockState.get(COIL) == 1){
+            return new Identifier( "textures/block/copper_block.png");
+        }else if(blockState.get(COIL) == 2){
+            return new Identifier( "textures/block/gold_block.png");
+        }else{
+            return new Identifier( "textures/block/iron_block.png");
+        }
     }
-
 }

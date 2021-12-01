@@ -40,6 +40,7 @@ public class ThermusObjects {
     public static final Item IRON_HAMMER = register("iron_hammer", new HammerItem(gen()));
     public static final Item GOLD_HAMMER = register("gold_hammer", new HammerItem(gen()));
     public static final Item STEEL_HAMMER = register("steel_hammer", new HammerItem(gen()));
+    public static final Item STEEL_INGOT = register("steel_ingot", new Item(gen()));
 
 
 

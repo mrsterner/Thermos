@@ -1,5 +1,7 @@
 package com.bloomhousemc.thermus.common.blocks.boiler;
 
+import com.bloomhousemc.thermus.Thermus;
+import com.bloomhousemc.thermus.common.registry.ThermusObjects;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
@@ -25,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BoilerBlock extends BlockWithEntity {
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
-    public static final IntProperty COIL = IntProperty.of("coil", 0,2);
+    public static final IntProperty COIL = IntProperty.of("coil", 0,3);
     public BoilerBlock(Settings settings) {
         super(settings.nonOpaque());
         this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(COIL,0));
@@ -45,7 +47,22 @@ public class BoilerBlock extends BlockWithEntity {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if(!world.isClient){
-            player.getStackInHand(hand).getItem();
+            if(state.get(COIL) == 0){
+                ItemStack itemStack = player.getStackInHand(hand);
+                if(itemStack.isOf(ThermusObjects.COPPER_COIL)){
+                    world.setBlockState(pos, state.with(COIL, 1));
+                    return ActionResult.CONSUME;
+                }
+                if(itemStack.isOf(ThermusObjects.GOLD_COIL)){
+                    world.setBlockState(pos, state.with(COIL, 2));
+                    return ActionResult.CONSUME;
+                }
+                if(itemStack.isOf(ThermusObjects.IRON_COIL)){
+                    world.setBlockState(pos, state.with(COIL, 3));
+                    return ActionResult.CONSUME;
+                }
+            }
+
         }
 
         return ActionResult.PASS;
