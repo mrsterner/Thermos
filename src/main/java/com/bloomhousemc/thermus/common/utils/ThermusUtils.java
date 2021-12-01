@@ -19,6 +19,10 @@ import java.util.Map;
 import net.minecraft.world.gen.random.ChunkRandom;
 
 public class ThermusUtils {
+    private double waterSpecificHeatCapacity = 4.18;
+    private double playerSpecificHeatCapacity = 3.6;
+    private double blockSpecificHeatCapacity = 2.0;
+    private double airSpecificHeatCapacity = 0.7;
 
     protected static final OctaveSimplexNoiseSampler TEMPERATURE_NOISE = new OctaveSimplexNoiseSampler(new ChunkRandom(new ThermusRandom()), ImmutableList.of(0));
 
@@ -47,6 +51,9 @@ public class ThermusUtils {
 
 
 
+
+
+    //Registry
 
     public static final Map<Block, Identifier> BLOCKS = new LinkedHashMap<>();
     public static final Map<Item, Identifier> ITEMS = new LinkedHashMap<>();

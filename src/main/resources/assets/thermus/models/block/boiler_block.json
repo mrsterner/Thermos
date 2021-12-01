@@ -1,6 +1,7 @@
 {
   "parent": "builtin/entity",
   "textures": {
+    "particle": "minecraft:block/bricks"
   },
   "display": {
     "gui": {

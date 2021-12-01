@@ -3,6 +3,7 @@ package com.bloomhousemc.thermus.client.renderer;
 import com.bloomhousemc.thermus.Thermus;
 import com.bloomhousemc.thermus.client.model.BoilerModel;
 import com.bloomhousemc.thermus.client.model.CoilModel;
+import com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlock;
 import com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.OverlayTexture;
@@ -34,7 +35,7 @@ public class BoilerBlockEntityRenderer extends GeoBlockRenderer<BoilerBlockEntit
     public void render(BoilerBlockEntity tile, float partialTicks, MatrixStack matrixStack, VertexConsumerProvider bufferIn, int packedLightIn) {
         super.render(tile, partialTicks, matrixStack, bufferIn, packedLightIn);
         BlockState blockState = tile.getWorld().getBlockState(tile.getPos());
-        if(blockState.get(COIL)==0){
+        if(blockState.getBlock() instanceof BoilerBlock && blockState.get(COIL)==0){
             matrixStack.push();
 
             Direction direction = blockState.get(FACING);

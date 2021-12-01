@@ -1,6 +1,7 @@
 {
   "parent": "builtin/entity",
   "textures": {
+    "particle": "minecraft:block/copper_block"
   },
   "display": {
     "gui": {

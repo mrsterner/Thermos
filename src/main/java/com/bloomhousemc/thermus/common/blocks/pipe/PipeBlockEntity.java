@@ -3,7 +3,6 @@ package com.bloomhousemc.thermus.common.blocks.pipe;
 import com.bloomhousemc.thermus.common.registry.ThermusObjects;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -32,14 +31,14 @@ public class PipeBlockEntity extends BlockEntity implements IAnimatable {
     }
 
     private <E extends BlockEntity & IAnimatable> PlayState predicateUp(AnimationEvent<E> event) {
-        if(event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).get(UP)){
+        if(event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).getBlock() instanceof PipeBlock &&event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).get(UP)){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.pipe.up", true));
             return PlayState.CONTINUE;
         }
         return PlayState.STOP;
     }
     private <E extends BlockEntity & IAnimatable> PlayState predicateDown(AnimationEvent<E> event) {
-        if(event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).get(DOWN)) {
+        if(event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).getBlock() instanceof PipeBlock &&event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).get(DOWN)) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.pipe.down", true));
             return PlayState.CONTINUE;
         }
@@ -47,28 +46,28 @@ public class PipeBlockEntity extends BlockEntity implements IAnimatable {
     }
 
     private <E extends BlockEntity & IAnimatable> PlayState predicateNorth(AnimationEvent<E> event) {
-        if(event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).get(NORTH)) {
+        if(event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).getBlock() instanceof PipeBlock && event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).get(NORTH)) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.pipe.north", true));
             return PlayState.CONTINUE;
         }
         return PlayState.STOP;
     }
     private <E extends BlockEntity & IAnimatable> PlayState predicateSouth(AnimationEvent<E> event) {
-        if(event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).get(SOUTH)) {
+        if(event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).getBlock() instanceof PipeBlock &&event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).get(SOUTH)) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.pipe.south", true));
             return PlayState.CONTINUE;
         }
         return PlayState.STOP;
     }
     private <E extends BlockEntity & IAnimatable> PlayState predicateEast(AnimationEvent<E> event) {
-        if(event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).get(EAST)) {
+        if(event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).getBlock() instanceof PipeBlock &&event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).get(EAST)) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.pipe.east", true));
             return PlayState.CONTINUE;
         }
         return PlayState.STOP;
     }
     private <E extends BlockEntity & IAnimatable> PlayState predicateWest(AnimationEvent<E> event) {
-        if(event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).get(WEST)) {
+        if(event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).getBlock() instanceof PipeBlock &&event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).get(WEST)) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.pipe.west", true));
             return PlayState.CONTINUE;
         }
