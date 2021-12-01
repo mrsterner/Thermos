@@ -1,0 +1,69 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.pipe.north": {
+			"loop": true,
+			"bones": {
+				"north": {
+					"position": {
+						"vector": [0, 0, -5]
+					}
+				}
+			}
+		},
+		"animation.pipe.south": {
+			"loop": true,
+			"bones": {
+				"south": {
+					"position": {
+						"vector": [0, 0, 5]
+					}
+				}
+			}
+		},
+		"animation.pipe.east": {
+			"loop": true,
+			"bones": {
+				"east": {
+					"position": {
+						"vector": [-5, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.pipe.west": {
+			"loop": true,
+			"bones": {
+				"west": {
+					"position": {
+						"vector": [5, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.pipe.up": {
+			"loop": true,
+			"bones": {
+				"up": {
+					"position": {
+						"vector": [0, 5, 0]
+					}
+				}
+			}
+		},
+		"animation.pipe.down": {
+			"loop": true,
+			"bones": {
+				"down": {
+					"position": {
+						"vector": [0, -5, 0]
+					}
+				}
+			}
+		},
+		"animation.pipe.center": {
+			"loop": true
+		}
+	},
+	"geckolib_format_version": 2
+}

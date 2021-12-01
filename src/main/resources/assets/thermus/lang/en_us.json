@@ -1,4 +1,14 @@
 {
   "hud.thermus.temperature.player": "Player: %d °C",
-  "hud.thermous.temperature.world": "World: %d °C"
+  "hud.thermus.temperature.world": "World: %d °C",
+
+  "itemGroup.thermus.thermus": "Thermus",
+
+  "item.thermus.debug_thermus": "Thermus Debug Stick",
+  "item.thermus.copper_coil": "Copper Coil",
+  "item.thermus.copper_gold": "Gold Coil",
+  "item.thermus.copper_iron": "Iron Coil",
+  "item.thermus.copper_steel": "Steel Coil",
+
+  "block.thermus.pipe_block": "Copper Pipe"
 }

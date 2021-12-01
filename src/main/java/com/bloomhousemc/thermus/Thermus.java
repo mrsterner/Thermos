@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Thermus implements ModInitializer {
 	public static final String MODID = "thermus";
-	public static final ItemGroup THERMUS_GROUP = FabricItemGroupBuilder.build(new Identifier(MODID, MODID), () -> new ItemStack(Blocks.GOLD_BLOCK));
+	public static final ItemGroup THERMUS_GROUP = FabricItemGroupBuilder.build(new Identifier(MODID, MODID), () -> new ItemStack(ThermusObjects.COPPER_COIL));
 	public static final Item DEBUG_THERMO = new DebugThermusItem(new FabricItemSettings().group(ItemGroup.MISC));
 
 
