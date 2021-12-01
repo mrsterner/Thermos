@@ -63,8 +63,6 @@ dependencies {
 	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cca_version}"
 	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-world:${cca_version}"
 	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-world:${cca_version}"
-	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-chunk:${cca_version}"
-	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-chunk:${cca_version}"
 	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${cca_version}"
 	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${cca_version}"
 

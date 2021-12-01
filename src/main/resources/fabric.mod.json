@@ -33,9 +33,6 @@
     "cardinal-components-world": [
       "com.bloomhousemc.thermus.common.registry.ThermusComponents"
     ],
-    "cardinal-components-chunk": [
-      "com.bloomhousemc.thermus.common.registry.ThermusComponents"
-    ],
     "cardinal-components-block": [
       "com.bloomhousemc.thermus.common.registry.ThermusComponents"
     ]
@@ -43,6 +40,11 @@
   "mixins": [
     "thermus.mixins.json"
   ],
+  "custom": {
+    "cardinal-components": [
+      "thermus:temperature"
+    ]
+  },
 
   "depends": {
     "fabricloader": ">=0.11.3",
