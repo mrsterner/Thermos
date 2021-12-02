@@ -2,6 +2,7 @@ package com.bloomhousemc.thermus.client.renderer;
 
 import com.bloomhousemc.thermus.Thermus;
 import com.bloomhousemc.thermus.client.model.BoilerModel;
+import com.bloomhousemc.thermus.client.model.CoalModel;
 import com.bloomhousemc.thermus.client.model.CoilModel;
 import com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlock;
 import com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlockEntity;
@@ -11,6 +12,8 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3f;
@@ -21,6 +24,7 @@ import static com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlock.FACING;
 
 public class BoilerBlockEntityRenderer extends GeoBlockRenderer<BoilerBlockEntity> {
     public static CoilModel coilModel = new CoilModel();
+    public static CoalModel coalModel = new CoalModel();
     public BoilerBlockEntityRenderer() {
         super(new BoilerModel());
     }

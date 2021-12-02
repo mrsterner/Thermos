@@ -21,12 +21,15 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import static com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlock.COAL;
+
 public class BoilerBlockEntity extends BlockEntity implements IAnimatable, ImplementedInventory, SidedInventory {
     private final DefaultedList<ItemStack> items = DefaultedList.ofSize(2, ItemStack.EMPTY);
     private final AnimationFactory factory = new AnimationFactory(this);
     public BoilerBlockEntity(BlockPos pos, BlockState state) {
         super(ThermusObjects.BOILER_BLOCK_ENTITY, pos, state);
     }
+
 
 
     @Override
@@ -46,9 +49,26 @@ public class BoilerBlockEntity extends BlockEntity implements IAnimatable, Imple
         return PlayState.CONTINUE;
     }
 
+    private <E extends BlockEntity & IAnimatable> PlayState coal(AnimationEvent<E> event) {
+        if(event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).getBlock() instanceof BoilerBlock){
+            int coal = event.getAnimatable().getWorld().getBlockState(event.getAnimatable().getPos()).get(COAL);
+            String animation = switch (coal) {
+                case 1 -> "coal1";
+                case 2 -> "coal2";
+                case 3 -> "coal3";
+                case 4 -> "coal4";
+                default -> "nocoal";
+            };
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.boiler."+animation, true));
+            return PlayState.CONTINUE;
+        }
+        return PlayState.STOP;
+    }
+
     @Override
     public void registerControllers(AnimationData animationData) {
         animationData.addAnimationController(new AnimationController<>(this, "controller", 0, this::predicate));
+        animationData.addAnimationController(new AnimationController<>(this, "coal", 0, this::coal));
     }
 
     @Override

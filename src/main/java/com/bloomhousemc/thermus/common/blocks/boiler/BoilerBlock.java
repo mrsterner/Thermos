@@ -27,10 +27,11 @@ import org.jetbrains.annotations.Nullable;
 public class BoilerBlock extends BlockWithEntity {
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
     public static final BooleanProperty LIT = Properties.LIT;
+    public static final IntProperty COAL = IntProperty.of("coal", 0,4);
     public static final IntProperty COIL = IntProperty.of("coil", 0,3);
     public BoilerBlock(Settings settings) {
         super(settings.nonOpaque().luminance((state) -> (state.get(LIT) ? 10 : 0)));
-        this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(COIL,0).with(LIT, false));
+        this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(COIL,0).with(LIT, false).with(COAL, 0));
     }
 
     @Nullable
@@ -41,7 +42,24 @@ public class BoilerBlock extends BlockWithEntity {
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(FACING).add(COIL).add(LIT);
+        builder.add(FACING).add(COIL).add(LIT).add(COAL);
+    }
+
+    public static void updateCoal(BlockState state, World world, BlockPos pos){
+        if(world.getBlockEntity(pos) instanceof BoilerBlockEntity boilerBlockEntity){
+            int count = boilerBlockEntity.getStack(0).getCount() + boilerBlockEntity.getStack(1).getCount();
+            if(count == 0){
+                world.setBlockState(pos, state.with(COAL, 0));
+            }else if(count < 16){
+                world.setBlockState(pos, state.with(COAL, 1));
+            }else if(count < 32){
+                world.setBlockState(pos, state.with(COAL, 2));
+            }else if(count < 48){
+                world.setBlockState(pos, state.with(COAL, 3));
+            }else{
+                world.setBlockState(pos, state.with(COAL, 4));
+            }
+        }
     }
 
     @Override
@@ -68,7 +86,7 @@ public class BoilerBlock extends BlockWithEntity {
                     if(boilerBlockEntity.getStack(0).getCount()<64){
                         if(boilerBlockEntity.getStack(0).isOf(ItemStack.EMPTY.getItem()) || boilerBlockEntity.getStack(0).isOf(Items.AIR)){
                             boilerBlockEntity.setStack(0,player.getStackInHand(hand).split(1));
-                            return ActionResult.CONSUME;
+
                         }else if(player.isSneaking()){
                             while(boilerBlockEntity.getStack(0).getCount()<64 && player.getStackInHand(hand).getCount()>0){
                                 boilerBlockEntity.getStack(0).increment(1);
@@ -77,7 +95,10 @@ public class BoilerBlock extends BlockWithEntity {
                         }else{
                             boilerBlockEntity.getStack(0).increment(1);
                             player.getStackInHand(hand).decrement(1);
+
                         }
+                        updateCoal(state,world,pos);
+                        boilerBlockEntity.markDirty();
                         return ActionResult.CONSUME;
                     }
                 }
@@ -113,7 +134,7 @@ public class BoilerBlock extends BlockWithEntity {
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return super.getPlacementState(ctx).with(FACING, ctx.getPlayerFacing()).with(COIL,0).with(LIT, false);
+        return super.getPlacementState(ctx).with(FACING, ctx.getPlayerFacing()).with(COIL,0).with(LIT, false).with(COIL, 0);
     }
 
     @Override
