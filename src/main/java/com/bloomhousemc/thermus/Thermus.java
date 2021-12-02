@@ -11,17 +11,30 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.SlabBlock;
+import net.minecraft.block.enums.SlabType;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShearsItem;
+import net.minecraft.particle.BlockStateParticleEffect;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.lwjgl.system.CallbackI;
 
-import static com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlock.FACING;
+import static net.minecraft.block.SlabBlock.TYPE;
 
 public class Thermus implements ModInitializer {
 	public static final String MODID = "thermus";
@@ -43,10 +56,20 @@ public class Thermus implements ModInitializer {
 
 						}
 						else if(ThermusObjects.STEEL_SLAB.equals(topBlock)){
+							BlockPos blockPos = hitResult.getBlockPos();
+							if(world.getBlockState(hitResult.getBlockPos().add(0,1,0)).get(TYPE) == SlabType.DOUBLE){
+								world.spawnEntity(new ItemEntity(world, blockPos.getX(),blockPos.getY()+0.5F,blockPos.getZ(), new ItemStack(ThermusObjects.STEEL_SLAB)));
+							}
 							Direction direction = player.getHorizontalFacing();
 							BlockState newBoiler = ThermusObjects.BOILER_BLOCK.getDefaultState().with(Properties.HORIZONTAL_FACING, direction);
-							world.setBlockState(hitResult.getBlockPos(), newBoiler, 3);
-							world.setBlockState(hitResult.getBlockPos().add(0,1,0), Blocks.AIR.getDefaultState());
+							world.breakBlock(blockPos, false);
+							world.breakBlock(blockPos.add(0,1,0), false);
+							world.setBlockState(blockPos, newBoiler, 3);
+							world.setBlockState(blockPos.add(0,1,0), Blocks.AIR.getDefaultState());
+							double Width = 1.0;
+							world.addParticle(new BlockStateParticleEffect(ParticleTypes.BLOCK, newBoiler), blockPos.getX() + ((double)world.random.nextFloat() - 0.5D) * Width, blockPos.getY() + 0.1D, blockPos.getZ() + ((double)world.random.nextFloat() - 0.5D) * Width, 4.0D * ((double)world.random.nextFloat() - 0.5D), 0.5D, ((double)world.random.nextFloat() - 0.5D) * 4.0D);
+							world.playSound(null, blockPos, SoundEvents.BLOCK_COPPER_BREAK, SoundCategory.BLOCKS, 1F, 1F);
+							player.getStackInHand(hand).damage(1, world.random, (ServerPlayerEntity)player);
 							return ActionResult.CONSUME;
 						}
 						else{

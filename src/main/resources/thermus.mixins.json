@@ -4,6 +4,7 @@
   "package": "com.bloomhousemc.thermus.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "ServerPlayerInteractionManagerMixin"
   ],
   "client": [
     "InGameHudMixin"

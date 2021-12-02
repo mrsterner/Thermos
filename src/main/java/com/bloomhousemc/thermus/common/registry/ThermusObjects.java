@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.Material;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.Item;
@@ -45,7 +46,7 @@ public class ThermusObjects {
 
 
     //Blocks
-    public static final Block BOILER_BLOCK = register("boiler_block", new BoilerBlock(FabricBlockSettings.copyOf(Blocks.COPPER_BLOCK)), false);
+    public static final Block BOILER_BLOCK = register("boiler_block", new BoilerBlock(FabricBlockSettings.of(Material.METAL).hardness(4.0F).requiresTool()), false);
     public static final Block PIPE_BLOCK = register("pipe_block", new PipeBlock(FabricBlockSettings.copyOf(Blocks.COPPER_BLOCK)), true);
 
     public static final Block STEEL_BLOCK = register("steel_block", new Block(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)), true);

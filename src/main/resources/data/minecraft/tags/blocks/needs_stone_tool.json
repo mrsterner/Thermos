@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "thermus:boiler_block",
+    "thermus:steel_block",
+    "thermus:steel_slab",
+    "thermus:machine_frame",
+    "thermus:pipe_block"
+  ]
+}
+

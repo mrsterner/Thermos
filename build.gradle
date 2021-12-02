@@ -10,6 +10,8 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
+
+
 repositories {
 	maven {
 		name = 'Ladysnake Mods'
@@ -45,6 +47,22 @@ repositories {
 		name = 'GeckoLib'
 		url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
 	}
+	mavenCentral()
+	maven {
+		url = "https://jitpack.io/"
+		content {
+			includeGroup("com.github.PepperCode1")
+			includeGroup("com.github.SuperCoder7979")
+			includeGroup("com.github.Jozufozu")
+		}
+	}
+	maven {
+		url = "https://maven.jamieswhiteshirt.com/libs-release"
+		content {
+			includeGroup("com.jamieswhiteshirt")
+		}
+	}
+	mavenLocal()
 }
 
 dependencies {
@@ -76,6 +94,11 @@ dependencies {
 
 	//Geckolib
 	modImplementation "software.bernie.geckolib:geckolib-fabric-${gecko_version}"
+
+
+	//modImplementation(include("com.jozufozu.flywheel:Flywheel:${project.flywheel_version}"))
+	//Flywheel
+	//implementation 'com.github.mrsterner:Flywheel:0.4.0'
 }
 
 processResources {
