@@ -2,11 +2,10 @@ package com.bloomhousemc.thermus.client.renderer;
 
 import com.bloomhousemc.thermus.Thermus;
 import com.bloomhousemc.thermus.client.model.BoilerModel;
-import com.bloomhousemc.thermus.client.model.CoalModel;
 import com.bloomhousemc.thermus.client.model.CoilModel;
 import com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlock;
 import com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlockEntity;
-import com.bloomhousemc.thermus.common.registry.ThermusPorperties;
+import com.bloomhousemc.thermus.common.registry.ThermusProperties;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
@@ -14,8 +13,6 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -45,8 +42,8 @@ public class BoilerBlockEntityRenderer extends GeoBlockRenderer<BoilerBlockEntit
         World world = entity.getWorld();
         if (world != null && world.getBlockState(entity.getPos()).getBlock() instanceof BoilerBlock) {
             BlockPos pos = entity.getPos();
-            int coal = entity.getCachedState().get(ThermusPorperties.COAL);
-            boolean lit = entity.getCachedState().get(ThermusPorperties.LIT);
+            int coal = entity.getCachedState().get(ThermusProperties.COAL);
+            boolean lit = entity.getCachedState().get(ThermusProperties.LIT);
             if (coal > 0) {
                 if(lit && !MinecraftClient.getInstance().isPaused()){
                     Direction direction = world.getBlockState(pos).get(FACING);
@@ -63,7 +60,7 @@ public class BoilerBlockEntityRenderer extends GeoBlockRenderer<BoilerBlockEntit
 
 
         BlockState blockState = entity.getWorld().getBlockState(entity.getPos());
-        if(blockState.getBlock() instanceof BoilerBlock && blockState.get(ThermusPorperties.COIL)!=0){
+        if(blockState.getBlock() instanceof BoilerBlock && blockState.get(ThermusProperties.COIL)!=0){
             matrixStack.push();
 
             Direction direction = blockState.get(FACING);
@@ -86,11 +83,11 @@ public class BoilerBlockEntityRenderer extends GeoBlockRenderer<BoilerBlockEntit
 
     }
     public static Identifier getTexture(BlockState blockState, String string){
-        if(blockState.get(ThermusPorperties.COIL) == 1){
+        if(blockState.get(ThermusProperties.COIL) == 1){
             return new Identifier( "textures/block/copper_block.png");
-        }else if(blockState.get(ThermusPorperties.COIL) == 2){
+        }else if(blockState.get(ThermusProperties.COIL) == 2){
             return new Identifier( "textures/block/gold_block.png");
-        }else if(blockState.get(ThermusPorperties.COIL) == 3){
+        }else if(blockState.get(ThermusProperties.COIL) == 3){
             return new Identifier( "textures/block/iron_block.png");
         }else{
             return new Identifier(Thermus.MODID, "textures/block/steel_block");

@@ -7,13 +7,15 @@ import net.minecraft.entity.effect.StatusEffects;
 
 public class EntityTemperature extends BaseTemperature {
     protected LivingEntity owner;
-    public EntityTemperature(LivingEntity owner, int baseTemperature) {
+    public EntityTemperature(LivingEntity owner, double baseTemperature) {
         this.owner = owner;
         this.temperature = baseTemperature;
     }
 
+
+
     @Override
-    public void setTemperature(int value) {
+    public void setTemperature(double value) {
         super.setTemperature(value);
         if (!this.owner.world.isClient) {
             if (this.getTemperature() == 0) {
@@ -25,14 +27,10 @@ public class EntityTemperature extends BaseTemperature {
     }
 
     @Override
-    public void addTemperature(int value) {
+    public void addTemperature(double value) {
         if(getTemperature() + value < getMaxTemperature() && getTemperature() +value >getMinTemperature()){
             setTemperature(getTemperature() + value);
             ThermusComponents.TEMPERATURE_COMPONENT.sync(owner);
         }
-    }
-
-    public void setTargetTemperature(int temperature){
-
     }
 }

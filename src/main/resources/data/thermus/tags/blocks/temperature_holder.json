@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "thermus:boiler_block",
+    "minecraft:campfire",
+    "minecraft:furnace"
+  ]
+}

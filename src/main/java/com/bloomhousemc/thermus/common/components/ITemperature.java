@@ -8,27 +8,27 @@ public interface ITemperature extends ComponentV3 {
     static <T> ITemperature get(T provider) {
         return ThermusComponents.TEMPERATURE_COMPONENT.get(provider);
     }
-    int getTemperature();
+    double getTemperature();
 
-    int getMaxTemperature();
+    double getMaxTemperature();
 
-    int getMinTemperature();
+    double getMinTemperature();
 
-    void setTemperature(int value);
+    void setTemperature(double value);
 
-    void addTemperature(int value);
+    void addTemperature(double value);
 
-    void setTargetTemperature(int value);
+    void setTargetTemperature(double value);
 
-    int getTargetTemperature();
+    double getTargetTemperature();
 
-    void setTemperatureModifier(int value);
+    void setTemperatureModifier(double value);
 
-    int getTemperatureModifier();
+    double getTemperatureModifier();
 
-    default void transferTo(ITemperature dest, int amount) {
-        int sourceTemperature = this.getTemperature();
-        int actualAmount = Math.min(sourceTemperature, amount);
+    default void transferTo(ITemperature dest, double amount) {
+        double sourceTemperature = this.getTemperature();
+        double actualAmount = Math.min(sourceTemperature, amount);
         this.setTemperature(sourceTemperature - actualAmount);
         dest.setTemperature(dest.getTemperature() + actualAmount);
     }

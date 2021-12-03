@@ -19,11 +19,10 @@ public class UserHud extends DrawableHelper implements HudRenderCallback {
         PlayerEntity player = mc.player;
         TextRenderer textRenderer = mc.textRenderer;
         int height = mc.getWindow().getScaledHeight();
-        ITemperature temperature = ITemperature.get(player);
+        double temperature = ThermusComponents.TEMPERATURE_COMPONENT.get(player).getTemperature();
         AmbientTemperature.WorldTemperature worldTemp = (AmbientTemperature.WorldTemperature) ITemperature.get(player.world);
-        temperature.getTemperature();
         matrixStack.push();
-        renderText(matrixStack, textRenderer, new TranslatableText("hud.thermus.temperature.player", new TranslatableText(String.valueOf(temperature.getTemperature()))), height, 4);
+        renderText(matrixStack, textRenderer, new TranslatableText("hud.thermus.temperature.player", new TranslatableText(String.valueOf(temperature))), height, 4);
         renderText(matrixStack, textRenderer, new TranslatableText("hud.thermus.temperature.world", new TranslatableText(String.valueOf(worldTemp.getTemperature()))), height, 5);
         matrixStack.pop();
     }

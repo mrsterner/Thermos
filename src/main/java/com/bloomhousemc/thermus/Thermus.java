@@ -4,8 +4,11 @@ import com.bloomhousemc.thermus.common.blocks.MachineFrameBlock;
 import com.bloomhousemc.thermus.common.items.DebugThermusItem;
 import com.bloomhousemc.thermus.common.items.HammerItem;
 import com.bloomhousemc.thermus.common.registry.ThermusObjects;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.Block;
@@ -41,10 +44,14 @@ public class Thermus implements ModInitializer {
 	public static final ItemGroup THERMUS_GROUP = FabricItemGroupBuilder.build(new Identifier(MODID, MODID), () -> new ItemStack(ThermusObjects.STEEL_HAMMER));
 	public static final Item DEBUG_THERMO = new DebugThermusItem(new FabricItemSettings().group(ItemGroup.MISC));
 
-
+	public static ThermusConfig config;
 	@Override
 	public void onInitialize() {
+		AutoConfig.register(ThermusConfig.class, GsonConfigSerializer::new);
+		config = AutoConfig.getConfigHolder(ThermusConfig.class).getConfig();
 		ThermusObjects.init();
+
+
 
 
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {

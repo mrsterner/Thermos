@@ -16,7 +16,6 @@ import net.minecraft.block.SlabBlock;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.Item;
 import net.minecraft.util.registry.Registry;
-import org.lwjgl.system.CallbackI;
 
 import static com.bloomhousemc.thermus.common.utils.ThermusUtils.*;
 
@@ -46,7 +45,7 @@ public class ThermusObjects {
 
 
     //Blocks
-    public static final Block BOILER_BLOCK = register("boiler_block", new BoilerBlock(FabricBlockSettings.of(Material.METAL).hardness(4.0F).requiresTool().luminance(blockState -> blockState.get(ThermusPorperties.LIT) ? 15 : 0)), false);
+    public static final Block BOILER_BLOCK = register("boiler_block", new BoilerBlock(FabricBlockSettings.of(Material.METAL).hardness(4.0F).requiresTool().luminance(blockState -> blockState.get(ThermusProperties.LIT) ? 15 : 0)), false);
     public static final Block PIPE_BLOCK = register("pipe_block", new PipeBlock(FabricBlockSettings.copyOf(Blocks.COPPER_BLOCK)), true);
 
     public static final Block STEEL_BLOCK = register("steel_block", new Block(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)), true);

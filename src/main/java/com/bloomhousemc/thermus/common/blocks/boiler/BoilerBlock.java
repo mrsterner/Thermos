@@ -1,26 +1,17 @@
 package com.bloomhousemc.thermus.common.blocks.boiler;
 
-import com.bloomhousemc.thermus.Thermus;
-import com.bloomhousemc.thermus.common.registry.ThermusObjects;
-import com.bloomhousemc.thermus.common.registry.ThermusPorperties;
-import com.bloomhousemc.thermus.common.registry.ThermusTags;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.bloomhousemc.thermus.common.registry.ThermusProperties;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.FurnaceBlockEntity;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.state.property.Properties;
 import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -32,7 +23,7 @@ public class BoilerBlock extends BlockWithEntity {
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
     public BoilerBlock(Settings settings) {
         super(settings.nonOpaque());
-        this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(ThermusPorperties.COIL,0).with(ThermusPorperties.LIT, false).with(ThermusPorperties.COAL, 0));
+        this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(ThermusProperties.COIL,0).with(ThermusProperties.LIT, false).with(ThermusProperties.COAL, 0));
     }
 
     @Nullable
@@ -50,15 +41,15 @@ public class BoilerBlock extends BlockWithEntity {
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(FACING).add(ThermusPorperties.COIL).add(ThermusPorperties.LIT).add(ThermusPorperties.COAL);
+        builder.add(FACING).add(ThermusProperties.COIL).add(ThermusProperties.LIT).add(ThermusProperties.COAL);
     }
 
 
 
     public static void setZeroState(World world, BlockPos pos, BlockState state){
         if(world.getBlockEntity(pos) instanceof BoilerBlockEntity boilerBlockEntity){
-            world.setBlockState(pos,state.with(ThermusPorperties.LIT, false));
-            world.setBlockState(pos,state.with(ThermusPorperties.COAL, 0));
+            world.setBlockState(pos,state.with(ThermusProperties.LIT, false));
+            world.setBlockState(pos,state.with(ThermusProperties.COAL, 0));
             boilerBlockEntity.markDirty();
         }
     }
@@ -97,17 +88,17 @@ public class BoilerBlock extends BlockWithEntity {
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return super.getPlacementState(ctx).with(FACING, ctx.getPlayerFacing()).with(ThermusPorperties.COIL,0).with(ThermusPorperties.LIT, false).with(ThermusPorperties.COAL, 0);
+        return super.getPlacementState(ctx).with(FACING, ctx.getPlayerFacing()).with(ThermusProperties.COIL,0).with(ThermusProperties.LIT, false).with(ThermusProperties.COAL, 0);
     }
 
     @Override
     public BlockState rotate(BlockState state, BlockRotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING))).with(ThermusPorperties.COIL,0);
+        return state.with(FACING, rotation.rotate(state.get(FACING))).with(ThermusProperties.COIL,0);
     }
 
     @Override
     public BlockState mirror(BlockState state, BlockMirror mirror) {
-        return state.rotate(mirror.getRotation(state.get(FACING))).with(ThermusPorperties.COIL,0);
+        return state.rotate(mirror.getRotation(state.get(FACING))).with(ThermusProperties.COIL,0);
     }
 
     @Override

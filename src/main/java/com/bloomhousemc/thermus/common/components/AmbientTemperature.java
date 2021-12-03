@@ -10,19 +10,18 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 
 public abstract class AmbientTemperature extends BaseTemperature implements AutoSyncedComponent {
-    long t = 0;
     public abstract void syncWithAll(MinecraftServer server);
 
     @Override
     public void applySyncPacket(PacketByteBuf buf) {
-        int temperature = buf.readInt();
+        double temperature = buf.readDouble();
         this.setTemperature(temperature);
     }
 
 
     @Override
     public void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity player) {
-        buf.writeInt(this.getTemperature());
+        buf.writeDouble(this.getTemperature());
     }
 
     public static class WorldTemperature extends AmbientTemperature implements ServerTickingComponent {
@@ -40,7 +39,7 @@ public abstract class AmbientTemperature extends BaseTemperature implements Auto
         @Override
         public void serverTick() {
             if (this.world.getTime() % 10 == 0) {
-                setTemperature(ThermusUtils.dayTimeTemperatureFunction(ThermusUtils.simpleTimeOfDay(world), 10, 2, 10, 0));
+                setTemperature(Math.round(ThermusUtils.dayTimeTemperatureFunction(ThermusUtils.simpleTimeOfDay(world), 10, 2, 10, 0)*100D)/100D);
                 this.syncWithAll(world.getServer());
             }
         }

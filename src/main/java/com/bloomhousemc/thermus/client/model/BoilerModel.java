@@ -2,7 +2,7 @@ package com.bloomhousemc.thermus.client.model;
 
 import com.bloomhousemc.thermus.Thermus;
 import com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlockEntity;
-import com.bloomhousemc.thermus.common.registry.ThermusPorperties;
+import com.bloomhousemc.thermus.common.registry.ThermusProperties;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
@@ -16,7 +16,7 @@ public class BoilerModel extends AnimatedGeoModel<BoilerBlockEntity> {
 
     @Override
     public Identifier getTextureLocation(BoilerBlockEntity object) {
-        return new Identifier(Thermus.MODID, object.getCachedState().get(ThermusPorperties.LIT) ? "textures/block/boiler_block_lit.png" : "textures/block/boiler_block.png");
+        return new Identifier(Thermus.MODID, object.getCachedState().get(ThermusProperties.LIT) ? "textures/block/boiler_block_lit.png" : "textures/block/boiler_block.png");
     }
 
     @Override

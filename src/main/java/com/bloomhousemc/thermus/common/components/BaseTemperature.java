@@ -5,74 +5,74 @@ import dev.onyxstudios.cca.api.v3.component.CopyableComponent;
 import net.minecraft.nbt.NbtCompound;
 
 public class BaseTemperature implements ITemperature, Component, CopyableComponent<BaseTemperature> {
-    private int MAX_TEMP = 2000;
-    private int MIN_TEMP = -273;
-    protected int temperature;
-    protected int targetTemperature;
-    protected int temperatureModifier = 0;
+    private double MAX_TEMP = 2000;
+    private double MIN_TEMP = -273;
+    protected double temperature;
+    protected double targetTemperature;
+    protected double temperatureModifier = 1;
 
     public BaseTemperature(){
         this(0);
     }
 
-    public BaseTemperature(int temperature) {
+    public BaseTemperature(double temperature) {
         this.temperature = temperature;
     }
 
     @Override
-    public int getTemperature() {
+    public double getTemperature() {
         return this.temperature;
     }
 
     @Override
-    public int getMaxTemperature() {
+    public double getMaxTemperature() {
         return MAX_TEMP;
     }
 
     @Override
-    public int getMinTemperature() {
+    public double getMinTemperature() {
         return MIN_TEMP;
     }
 
     @Override
-    public void setTemperature(int value) {
+    public void setTemperature(double value) {
         this.temperature = value;
     }
 
     @Override
-    public void addTemperature(int value) {
+    public void addTemperature(double value) {
 
     }
 
     @Override
-    public void setTargetTemperature(int value) {
+    public void setTargetTemperature(double value) {
         this.targetTemperature = value;
     }
 
     @Override
-    public int getTargetTemperature() {
+    public double getTargetTemperature() {
         return targetTemperature;
     }
 
     @Override
-    public void setTemperatureModifier(int value) {
+    public void setTemperatureModifier(double value) {
         this.temperatureModifier = value;
     }
 
     @Override
-    public int getTemperatureModifier() {
+    public double getTemperatureModifier() {
         return temperatureModifier;
     }
 
 
     @Override
     public void readFromNbt(NbtCompound tag) {
-        this.temperature = tag.getInt("temperature");
+        this.temperature = tag.getDouble("temperature");
     }
 
     @Override
     public void writeToNbt(NbtCompound tag) {
-        tag.putInt("temperature", this.temperature);
+        tag.putDouble("temperature", this.temperature);
     }
 
     @Override
@@ -89,6 +89,6 @@ public class BaseTemperature implements ITemperature, Component, CopyableCompone
 
     @Override
     public int hashCode() {
-        return Integer.hashCode(this.temperature);
+        return Double.hashCode(this.temperature);
     }
 }

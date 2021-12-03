@@ -19,10 +19,6 @@ import java.util.Map;
 import net.minecraft.world.gen.random.ChunkRandom;
 
 public class ThermusUtils {
-    private double waterSpecificHeatCapacity = 4.18;
-    private double playerSpecificHeatCapacity = 3.6;
-    private double blockSpecificHeatCapacity = 2.0;
-    private double airSpecificHeatCapacity = 0.7;
 
     protected static final OctaveSimplexNoiseSampler TEMPERATURE_NOISE = new OctaveSimplexNoiseSampler(new ChunkRandom(new ThermusRandom()), ImmutableList.of(0));
 
@@ -39,13 +35,32 @@ public class ThermusUtils {
      * @param offset offsets the minMax, if {@code minMax} is 10 and {@code offset} is 5, output temperature will be 15°C and -5°C
      * @return temperature
      */
-    public static int dayTimeTemperatureFunction(double time, int curvature, int wobble, int minMax, int offset){
+    public static double dayTimeTemperatureFunction(double time, int curvature, int wobble, int minMax, int offset){
         var cosPeriod = Math.cos((Math.PI * time / 1200) - Math.PI / 2);
         double T = Math.sqrt((1+curvature*curvature)/(1+curvature*curvature* cosPeriod * cosPeriod))* cosPeriod*minMax+offset;
         double sine = Math.sin(wobble*time)/(wobble+2);
-        return (int)(T - sine);
+        return T - sine;
     }
+    public enum CapacityTypes{
+        AIR("air", 0.7D),
+        WATER("water", 4.18D),
+        PLAYER("player", 3.6D),
+        BLOCK("block", 2.0D);
+        String type;
+        double capacity;
 
+        private CapacityTypes(String type, double capacity){
+            this.type = type;
+            this.capacity = capacity;
+
+        }
+        public String getType() {
+            return this.type;
+        }
+        public double getCapacity() {
+            return this.capacity;
+        }
+    }
 
 
 

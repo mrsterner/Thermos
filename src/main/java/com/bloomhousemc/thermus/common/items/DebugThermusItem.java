@@ -3,7 +3,6 @@ package com.bloomhousemc.thermus.common.items;
 import com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlock;
 import com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlockEntity;
 import com.bloomhousemc.thermus.common.components.ITemperature;
-import com.bloomhousemc.thermus.common.registry.ThermusPorperties;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,19 +38,19 @@ public class DebugThermusItem extends Item {
             System.out.println(boilerBlockEntity.getItems());
         }
         try {
-            int i = ITemperature.get(blockState).getTemperature();
+            double i = ITemperature.get(blockState).getTemperature();
             System.out.println("Temperature: "+i);
         }catch(Exception e){
             System.out.println("Did not find temperature in target");
         }
         try {
-            int i = ITemperature.get(blockState).getTemperatureModifier();
+            double i = ITemperature.get(blockState).getTemperatureModifier();
             System.out.println("TemperatureModifier: "+i);
         }catch(Exception e){
             System.out.println("Did not find modifier in target");
         }
         try {
-            int i = ITemperature.get(blockState).getTargetTemperature();
+            double i = ITemperature.get(blockState).getTargetTemperature();
             System.out.println("Target Temperature: "+i);
         }catch(Exception e){
             System.out.println("Did not find targetTemperature in target");
@@ -66,19 +65,19 @@ public class DebugThermusItem extends Item {
         if (!world.isClient) {
             if (user.isSneaking()) {
                 try {
-                    int i = ITemperature.get(user).getTemperature();
+                    double i = ITemperature.get(user).getTemperature();
                     System.out.println("Temperature: " + i);
                 } catch (Exception e) {
                     System.out.println("Did not find temperature in you");
                 }
                 try {
-                    int i = ITemperature.get(user).getTemperatureModifier();
+                    double i = ITemperature.get(user).getTemperatureModifier();
                     System.out.println("Temperature Modifier: " + i);
                 } catch (Exception e) {
                     System.out.println("Did not find temperatureModifier in you");
                 }
                 try {
-                    int i = ITemperature.get(user).getTargetTemperature();
+                    double i = ITemperature.get(user).getTargetTemperature();
                     System.out.println("Target Temperature: " + i);
                 } catch (Exception e) {
                     System.out.println("Did not find targetTemperature in you");
