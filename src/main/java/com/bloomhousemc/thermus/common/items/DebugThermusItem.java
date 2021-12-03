@@ -3,6 +3,7 @@ package com.bloomhousemc.thermus.common.items;
 import com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlock;
 import com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlockEntity;
 import com.bloomhousemc.thermus.common.components.ITemperature;
+import com.bloomhousemc.thermus.common.registry.ThermusPorperties;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,7 +21,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlock.LIT;
 
 public class DebugThermusItem extends Item {
     public DebugThermusItem(Settings settings) {

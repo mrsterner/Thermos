@@ -2,6 +2,7 @@ package com.bloomhousemc.thermus.common.blocks.boiler;
 
 import com.bloomhousemc.thermus.Thermus;
 import com.bloomhousemc.thermus.common.registry.ThermusObjects;
+import com.bloomhousemc.thermus.common.registry.ThermusPorperties;
 import com.bloomhousemc.thermus.common.registry.ThermusTags;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.*;
@@ -29,12 +30,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class BoilerBlock extends BlockWithEntity {
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
-    public static final BooleanProperty LIT = Properties.LIT;
-    public static final IntProperty COAL = IntProperty.of("coal", 0,4);
-    public static final IntProperty COIL = IntProperty.of("coil", 0,4);
     public BoilerBlock(Settings settings) {
-        super(settings.nonOpaque().luminance((state) -> (state.get(LIT) ? 10 : 0)));
-        this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(COIL,0).with(LIT, false).with(COAL, 0));
+        super(settings.nonOpaque());
+        this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(ThermusPorperties.COIL,0).with(ThermusPorperties.LIT, false).with(ThermusPorperties.COAL, 0));
     }
 
     @Nullable
@@ -52,56 +50,26 @@ public class BoilerBlock extends BlockWithEntity {
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(FACING).add(COIL).add(LIT).add(COAL);
+        builder.add(FACING).add(ThermusPorperties.COIL).add(ThermusPorperties.LIT).add(ThermusPorperties.COAL);
     }
 
-    public static void updateCoal(BlockState state, World world, BlockPos pos){
+
+
+    public static void setZeroState(World world, BlockPos pos, BlockState state){
         if(world.getBlockEntity(pos) instanceof BoilerBlockEntity boilerBlockEntity){
-            int count = boilerBlockEntity.getStack(0).getCount() + boilerBlockEntity.getStack(1).getCount();
-            world.setBlockState(pos, state.with(COAL, count == 0 ? 0 : count < 16 ? 1 : count < 32 ? 2 : count < 48 ? 3 : 4));
+            world.setBlockState(pos,state.with(ThermusPorperties.LIT, false));
+            world.setBlockState(pos,state.with(ThermusPorperties.COAL, 0));
+            boilerBlockEntity.markDirty();
         }
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if(!world.isClient){
-            ItemStack itemStack = player.getStackInHand(hand);
-            if(state.get(COIL) == 0 && ThermusTags.COIL.contains(itemStack.getItem())){
-                world.setBlockState(pos, state.with(COIL, itemStack.isOf(ThermusObjects.COPPER_COIL) ? 1 : itemStack.isOf(ThermusObjects.GOLD_COIL) ? 2 : itemStack.isOf(ThermusObjects.IRON_COIL) ? 3 : 4));
-
-            }
-            if(world.getBlockEntity(pos) instanceof BoilerBlockEntity boilerBlockEntity && itemStack.isOf(Items.FLINT_AND_STEEL) && (boilerBlockEntity.getStack(0).getCount()+boilerBlockEntity.getStack(1).getCount()) > 0){
-                world.setBlockState(pos,state.with(LIT, true));
-            }
-            if(world.getBlockEntity(pos) instanceof BoilerBlockEntity boilerBlockEntity && (itemStack.isOf(Items.COAL) || itemStack.isOf(Items.CHARCOAL))){
-                if((boilerBlockEntity.getStack(0).getCount() + boilerBlockEntity.getStack(1).getCount())<64){
-                    if(boilerBlockEntity.getStack(itemStack.isOf(Items.COAL) ? 0 : 1).isOf(Items.AIR)){
-                        boilerBlockEntity.setStack(itemStack.isOf(Items.COAL) ? 0 : 1, itemStack.isOf(Items.COAL) ? new ItemStack(Items.COAL) : new ItemStack(Items.CHARCOAL));
-                        player.getStackInHand(hand).decrement(1);
-                        updateCoal(state,world,pos);
-                        boilerBlockEntity.markDirty();
-                        return ActionResult.CONSUME;
-                    }
-                    if(player.isSneaking()){
-                        while((boilerBlockEntity.getStack(0).getCount() + boilerBlockEntity.getStack(1).getCount())<64 && player.getStackInHand(hand).getCount()>0){
-                            if(boilerBlockEntity.getStack(itemStack.isOf(Items.COAL) ? 0 : 1).isOf(Items.AIR)){
-                                boilerBlockEntity.setStack(itemStack.isOf(Items.COAL) ? 0 : 1, itemStack.isOf(Items.COAL) ? new ItemStack(Items.COAL) : new ItemStack(Items.CHARCOAL));
-                                player.getStackInHand(hand).decrement(1);
-                            }
-                            boilerBlockEntity.getStack(itemStack.isOf(Items.COAL) ? 0 : 1).increment(1);
-                            player.getStackInHand(hand).decrement(1);
-                        }
-                    }else{
-                        boilerBlockEntity.getStack(itemStack.isOf(Items.COAL) ? 0 : 1).increment(1);
-                        player.getStackInHand(hand).decrement(1);
-                    }
-                }
-                updateCoal(state,world,pos);
-                boilerBlockEntity.markDirty();
-                return ActionResult.CONSUME;
-            }
+        boolean client = world.isClient;
+        if (!client) {
+            ((BoilerBlockEntity)world.getBlockEntity(pos)).onUse(world,state,pos,player,hand);
         }
-        return ActionResult.PASS;
+        return ActionResult.success(client);
     }
 
     @Override
@@ -129,17 +97,17 @@ public class BoilerBlock extends BlockWithEntity {
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return super.getPlacementState(ctx).with(FACING, ctx.getPlayerFacing()).with(COIL,0).with(LIT, false).with(COAL, 0);
+        return super.getPlacementState(ctx).with(FACING, ctx.getPlayerFacing()).with(ThermusPorperties.COIL,0).with(ThermusPorperties.LIT, false).with(ThermusPorperties.COAL, 0);
     }
 
     @Override
     public BlockState rotate(BlockState state, BlockRotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING))).with(COIL,0);
+        return state.with(FACING, rotation.rotate(state.get(FACING))).with(ThermusPorperties.COIL,0);
     }
 
     @Override
     public BlockState mirror(BlockState state, BlockMirror mirror) {
-        return state.rotate(mirror.getRotation(state.get(FACING))).with(COIL,0);
+        return state.rotate(mirror.getRotation(state.get(FACING))).with(ThermusPorperties.COIL,0);
     }
 
     @Override
