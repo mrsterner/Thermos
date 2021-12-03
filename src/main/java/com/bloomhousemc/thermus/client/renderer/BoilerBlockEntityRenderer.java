@@ -7,6 +7,7 @@ import com.bloomhousemc.thermus.client.model.CoilModel;
 import com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlock;
 import com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlockEntity;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -14,17 +15,19 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
+import net.minecraft.world.World;
 import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
 
-import static com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlock.COIL;
-import static com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlock.FACING;
+import static com.bloomhousemc.thermus.common.blocks.boiler.BoilerBlock.*;
 
 public class BoilerBlockEntityRenderer extends GeoBlockRenderer<BoilerBlockEntity> {
     public static CoilModel coilModel = new CoilModel();
-    public static CoalModel coalModel = new CoalModel();
     public BoilerBlockEntityRenderer() {
         super(new BoilerModel());
     }
@@ -36,9 +39,29 @@ public class BoilerBlockEntityRenderer extends GeoBlockRenderer<BoilerBlockEntit
     }
 
     @Override
-    public void render(BoilerBlockEntity tile, float partialTicks, MatrixStack matrixStack, VertexConsumerProvider bufferIn, int packedLightIn) {
-        super.render(tile, partialTicks, matrixStack, bufferIn, packedLightIn);
-        BlockState blockState = tile.getWorld().getBlockState(tile.getPos());
+    public void render(BoilerBlockEntity entity, float partialTicks, MatrixStack matrixStack, VertexConsumerProvider bufferIn, int packedLightIn) {
+        super.render(entity, partialTicks, matrixStack, bufferIn, packedLightIn);
+        World world = entity.getWorld();
+        if (world != null && world.getBlockState(entity.getPos()).getBlock() instanceof BoilerBlock) {
+            BlockPos pos = entity.getPos();
+            int coal = entity.getCachedState().get(COAL);
+            boolean lit = entity.getCachedState().get(LIT);
+            if (coal > 0) {
+                if(lit && !MinecraftClient.getInstance().isPaused()){
+                    Direction direction = world.getBlockState(pos).get(FACING);
+                    world.addParticle(ParticleTypes.FLAME,
+                    pos.getX() + 0.5 + MathHelper.nextDouble(world.random, -0.2, 0.2) + (direction == Direction.WEST ? 0.5 : direction == Direction.EAST ? -0.5 : 0),
+                    pos.getY() + 0.1,
+                    pos.getZ() + 0.5 + MathHelper.nextDouble(world.random, -0.2, 0.2) + (direction == Direction.NORTH ? 0.5 : direction == Direction.SOUTH ? -0.5 : 0),
+                    0, 0, 0);
+
+                }
+            }
+        }
+
+
+
+        BlockState blockState = entity.getWorld().getBlockState(entity.getPos());
         if(blockState.getBlock() instanceof BoilerBlock && blockState.get(COIL)!=0){
             matrixStack.push();
 
@@ -55,7 +78,7 @@ public class BoilerBlockEntityRenderer extends GeoBlockRenderer<BoilerBlockEntit
             direction == Direction.SOUTH ? 0 : 270));
 
 
-            render(getGeoModelProvider().getModel(new Identifier(Thermus.MODID, "geo/coil.geo.json")), tile, partialTicks, RenderLayer.getEntityCutout(getTexture(blockState,"")), matrixStack,bufferIn, bufferIn.getBuffer(RenderLayer.getEntityCutout(coilModel.getTextureLocation(tile))) ,packedLightIn, OverlayTexture.DEFAULT_UV, 1,1,1,1);
+            render(getGeoModelProvider().getModel(new Identifier(Thermus.MODID, "geo/coil.geo.json")), entity, partialTicks, RenderLayer.getEntityCutout(getTexture(blockState,"")), matrixStack,bufferIn, bufferIn.getBuffer(RenderLayer.getEntityCutout(coilModel.getTextureLocation(entity))) ,packedLightIn, OverlayTexture.DEFAULT_UV, 1,1,1,1);
             matrixStack.pop();
 
         }
@@ -66,8 +89,10 @@ public class BoilerBlockEntityRenderer extends GeoBlockRenderer<BoilerBlockEntit
             return new Identifier( "textures/block/copper_block.png");
         }else if(blockState.get(COIL) == 2){
             return new Identifier( "textures/block/gold_block.png");
-        }else{
+        }else if(blockState.get(COIL) == 3){
             return new Identifier( "textures/block/iron_block.png");
+        }else{
+            return new Identifier(Thermus.MODID, "textures/block/steel_block");
         }
     }
 }

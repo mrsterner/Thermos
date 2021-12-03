@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "thermus:gold_coil",
+    "thermus:iron_coil",
+    "thermus:copper_coil",
+    "thermus:steel_coil"
+  ]
+}

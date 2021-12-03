@@ -34,7 +34,7 @@ public class DebugThermusItem extends Item {
         BlockPos blockPos = context.getBlockPos();
         BlockState blockState = context.getWorld().getBlockState(blockPos);
         if(blockState.getBlock() instanceof BoilerBlock boilerBlock){
-            context.getWorld().setBlockState(blockPos, blockState.with(LIT, !blockState.get(LIT)));
+            //context.getWorld().setBlockState(blockPos, blockState.with(LIT, !blockState.get(LIT)));
             BoilerBlockEntity boilerBlockEntity = (BoilerBlockEntity) context.getWorld().getBlockEntity(blockPos);
             System.out.println(boilerBlockEntity.getItems());
         }

@@ -2,9 +2,12 @@ package com.bloomhousemc.thermus.common.blocks.boiler;
 
 import com.bloomhousemc.thermus.Thermus;
 import com.bloomhousemc.thermus.common.registry.ThermusObjects;
+import com.bloomhousemc.thermus.common.registry.ThermusTags;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.FurnaceBlockEntity;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.LivingEntity;
@@ -28,10 +31,17 @@ public class BoilerBlock extends BlockWithEntity {
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
     public static final BooleanProperty LIT = Properties.LIT;
     public static final IntProperty COAL = IntProperty.of("coal", 0,4);
-    public static final IntProperty COIL = IntProperty.of("coil", 0,3);
+    public static final IntProperty COIL = IntProperty.of("coil", 0,4);
     public BoilerBlock(Settings settings) {
         super(settings.nonOpaque().luminance((state) -> (state.get(LIT) ? 10 : 0)));
         this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(COIL,0).with(LIT, false).with(COAL, 0));
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return (tickerWorld, pos, tickerState, blockEntity) -> BoilerBlockEntity.tick(tickerWorld, pos, tickerState, (BoilerBlockEntity) blockEntity);
+
     }
 
     @Nullable
@@ -48,17 +58,7 @@ public class BoilerBlock extends BlockWithEntity {
     public static void updateCoal(BlockState state, World world, BlockPos pos){
         if(world.getBlockEntity(pos) instanceof BoilerBlockEntity boilerBlockEntity){
             int count = boilerBlockEntity.getStack(0).getCount() + boilerBlockEntity.getStack(1).getCount();
-            if(count == 0){
-                world.setBlockState(pos, state.with(COAL, 0));
-            }else if(count < 16){
-                world.setBlockState(pos, state.with(COAL, 1));
-            }else if(count < 32){
-                world.setBlockState(pos, state.with(COAL, 2));
-            }else if(count < 48){
-                world.setBlockState(pos, state.with(COAL, 3));
-            }else{
-                world.setBlockState(pos, state.with(COAL, 4));
-            }
+            world.setBlockState(pos, state.with(COAL, count == 0 ? 0 : count < 16 ? 1 : count < 32 ? 2 : count < 48 ? 3 : 4));
         }
     }
 
@@ -66,46 +66,41 @@ public class BoilerBlock extends BlockWithEntity {
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if(!world.isClient){
             ItemStack itemStack = player.getStackInHand(hand);
-            if(state.get(COIL) == 0){
-                if(itemStack.isOf(ThermusObjects.COPPER_COIL)){
-                    world.setBlockState(pos, state.with(COIL, 1));
-                    return ActionResult.CONSUME;
-                }
-                if(itemStack.isOf(ThermusObjects.GOLD_COIL)){
-                    world.setBlockState(pos, state.with(COIL, 2));
-                    return ActionResult.CONSUME;
-                }
-                if(itemStack.isOf(ThermusObjects.IRON_COIL)){
-                    world.setBlockState(pos, state.with(COIL, 3));
-                    return ActionResult.CONSUME;
-                }
+            if(state.get(COIL) == 0 && ThermusTags.COIL.contains(itemStack.getItem())){
+                world.setBlockState(pos, state.with(COIL, itemStack.isOf(ThermusObjects.COPPER_COIL) ? 1 : itemStack.isOf(ThermusObjects.GOLD_COIL) ? 2 : itemStack.isOf(ThermusObjects.IRON_COIL) ? 3 : 4));
+
             }
-            
-            if(itemStack.isOf(Items.COAL)){
-                if(world.getBlockEntity(pos) instanceof BoilerBlockEntity boilerBlockEntity){
-                    if(boilerBlockEntity.getStack(0).getCount()<64){
-                        if(boilerBlockEntity.getStack(0).isOf(ItemStack.EMPTY.getItem()) || boilerBlockEntity.getStack(0).isOf(Items.AIR)){
-                            boilerBlockEntity.setStack(0,player.getStackInHand(hand).split(1));
-
-                        }else if(player.isSneaking()){
-                            while(boilerBlockEntity.getStack(0).getCount()<64 && player.getStackInHand(hand).getCount()>0){
-                                boilerBlockEntity.getStack(0).increment(1);
-                                player.getStackInHand(hand).decrement(1);
-                            }
-                        }else{
-                            boilerBlockEntity.getStack(0).increment(1);
-                            player.getStackInHand(hand).decrement(1);
-
-                        }
+            if(world.getBlockEntity(pos) instanceof BoilerBlockEntity boilerBlockEntity && itemStack.isOf(Items.FLINT_AND_STEEL) && (boilerBlockEntity.getStack(0).getCount()+boilerBlockEntity.getStack(1).getCount()) > 0){
+                world.setBlockState(pos,state.with(LIT, true));
+            }
+            if(world.getBlockEntity(pos) instanceof BoilerBlockEntity boilerBlockEntity && (itemStack.isOf(Items.COAL) || itemStack.isOf(Items.CHARCOAL))){
+                if((boilerBlockEntity.getStack(0).getCount() + boilerBlockEntity.getStack(1).getCount())<64){
+                    if(boilerBlockEntity.getStack(itemStack.isOf(Items.COAL) ? 0 : 1).isOf(Items.AIR)){
+                        boilerBlockEntity.setStack(itemStack.isOf(Items.COAL) ? 0 : 1, itemStack.isOf(Items.COAL) ? new ItemStack(Items.COAL) : new ItemStack(Items.CHARCOAL));
+                        player.getStackInHand(hand).decrement(1);
                         updateCoal(state,world,pos);
                         boilerBlockEntity.markDirty();
                         return ActionResult.CONSUME;
                     }
+                    if(player.isSneaking()){
+                        while((boilerBlockEntity.getStack(0).getCount() + boilerBlockEntity.getStack(1).getCount())<64 && player.getStackInHand(hand).getCount()>0){
+                            if(boilerBlockEntity.getStack(itemStack.isOf(Items.COAL) ? 0 : 1).isOf(Items.AIR)){
+                                boilerBlockEntity.setStack(itemStack.isOf(Items.COAL) ? 0 : 1, itemStack.isOf(Items.COAL) ? new ItemStack(Items.COAL) : new ItemStack(Items.CHARCOAL));
+                                player.getStackInHand(hand).decrement(1);
+                            }
+                            boilerBlockEntity.getStack(itemStack.isOf(Items.COAL) ? 0 : 1).increment(1);
+                            player.getStackInHand(hand).decrement(1);
+                        }
+                    }else{
+                        boilerBlockEntity.getStack(itemStack.isOf(Items.COAL) ? 0 : 1).increment(1);
+                        player.getStackInHand(hand).decrement(1);
+                    }
                 }
+                updateCoal(state,world,pos);
+                boilerBlockEntity.markDirty();
+                return ActionResult.CONSUME;
             }
-
         }
-
         return ActionResult.PASS;
     }
 
@@ -134,7 +129,7 @@ public class BoilerBlock extends BlockWithEntity {
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return super.getPlacementState(ctx).with(FACING, ctx.getPlayerFacing()).with(COIL,0).with(LIT, false).with(COIL, 0);
+        return super.getPlacementState(ctx).with(FACING, ctx.getPlayerFacing()).with(COIL,0).with(LIT, false).with(COAL, 0);
     }
 
     @Override
