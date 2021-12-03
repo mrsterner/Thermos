@@ -68,7 +68,8 @@ public class PlayerTemperature extends EntityTemperature implements AutoSyncedCo
 
                 double currentTemp = 37.5;
                 double finalTemp = 0;
-                double chunkTemp = 0; //TODO chunkcomponent
+                double chunkTemp = -20; //TODO chunkcomponent
+                double worldTemp = ThermusComponents.TEMPERATURE_COMPONENT.get(player.world).getTemperature();
                 double sunTemp = player.world.getChunkManager().getLightingProvider().getLight(player.getBlockPos(), 0); //TODO check what ambient darkness is
                 double dayNightTemp = ThermusUtils.dayTimeTemperatureFunction(ThermusUtils.simpleTimeOfDay(player.world), 10, 2, 10, 0);
                 double temperatureTransferSpeed = Thermus.config.temperatureTransferSpeed;
@@ -78,6 +79,7 @@ public class PlayerTemperature extends EntityTemperature implements AutoSyncedCo
                     case NORMAL -> currentTemp += temperatureTransferSpeed*0.4F;
                     case HARD -> currentTemp += temperatureTransferSpeed*0.3F;
                 }
+                finalTemp += worldTemp;
                 finalTemp += dayNightTemp;
                 finalTemp += sunTemp > 5.0F ? (dayNightTemp * 5.0F) : (-1.0F * 5.0F);
                 finalTemp += chunkTemp;
@@ -136,9 +138,18 @@ public class PlayerTemperature extends EntityTemperature implements AutoSyncedCo
                 //System.out.println(blockList);
 
                 currentTemp += ThermusUtils.CapacityTypes.AIR.getCapacity() * temperatureTransferSpeed * (finalTemp - currentTemp);
-                ThermusComponents.TEMPERATURE_COMPONENT.get(owner).setTemperature((currentTemp));
-                ThermusComponents.TEMPERATURE_COMPONENT.sync(owner);
+                ThermusComponents.TEMPERATURE_COMPONENT.get(player).setTargetTemperature((currentTemp));
+                ThermusComponents.TEMPERATURE_COMPONENT.sync(player);
+
+                double temp = ThermusComponents.TEMPERATURE_COMPONENT.get(player).getTemperature();
+                double target = ThermusComponents.TEMPERATURE_COMPONENT.get(player).getTargetTemperature();
+                if(temp < target){
+                    ThermusComponents.TEMPERATURE_COMPONENT.get(player).setTemperature(temp += 0.1*target);
+                }else{
+                    ThermusComponents.TEMPERATURE_COMPONENT.get(player).setTemperature(temp -= 0.01*temperatureTransferSpeed*target);
+                }
             }
+
         }
     }
 
